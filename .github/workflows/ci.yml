@@ -41,6 +41,28 @@ jobs:
       - name: Checkout Code Repository
         uses: actions/checkout@v5
 
+      - name: Create .envs/.local directory
+        run: mkdir -p .envs/.local
+
+      - name: Create .envs/.local/.django file
+        run: |
+          cat << 'EOF' > .envs/.local/.django
+          USE_DOCKER=yes
+          IPYTHONDIR=/app/.ipython
+          EOF
+          sed -i 's/^[[:space:]]*//' .envs/.local/.django
+
+      - name: Create .envs/.local/.postgres file
+        run: |
+          cat << 'EOF' > .envs/.local/.postgres
+          POSTGRES_HOST=postgres
+          POSTGRES_PORT=5432
+          POSTGRES_DB=my_awesome_project
+          POSTGRES_USER=debug
+          POSTGRES_PASSWORD=debug
+          EOF
+          sed -i 's/^[[:space:]]*//' .envs/.local/.postgres
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
